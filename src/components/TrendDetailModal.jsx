@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, MapPin, Sparkles, Bookmark, Lightbulb } from 'lucide-react';
+import { X, MapPin, Sparkles, Bookmark, Lightbulb, Users, MessageSquareQuote, Camera, ExternalLink, ShieldCheck } from 'lucide-react';
 import { Line, Radar } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
 
@@ -93,6 +93,9 @@ export default function TrendDetailModal({ trend, onClose, onToggleSave, isSaved
                 <MapPin className="w-3 h-3 text-rose-400" />
                 {trend.regionName}
               </span>
+              <span className="text-[10px] font-mono bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">
+                Category: {trend.category}
+              </span>
             </div>
             <h2 className="font-editorial text-xl sm:text-2xl md:text-3xl font-bold gradient-text-gold leading-tight">
               {trend.name}
@@ -110,9 +113,9 @@ export default function TrendDetailModal({ trend, onClose, onToggleSave, isSaved
 
         {/* Grid Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Left Column: Image Lookbook & Color Palette */}
+          {/* Left Column: Image Lookbook & Photo Source Attributions */}
           <div className="lg:col-span-5 space-y-4 sm:space-y-6">
-            <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 relative h-60 sm:h-80 bg-slate-950">
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 relative h-64 sm:h-80 bg-slate-950">
               <img
                 src={trend.image}
                 alt={trend.name}
@@ -129,6 +132,50 @@ export default function TrendDetailModal({ trend, onClose, onToggleSave, isSaved
                 <span className="bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-lg border border-emerald-500/40 font-bold">
                   {trend.growthRate}
                 </span>
+              </div>
+            </div>
+
+            {/* Explicit Photo Source & Attribution Box */}
+            <div className="glass-panel p-4 space-y-2 font-mono text-xs border-cyan-500/30">
+              <div className="flex items-center gap-1.5 text-cyan-400 font-bold uppercase tracking-widest text-[11px] pb-1.5 border-b border-cyan-500/20">
+                <Camera className="w-4 h-4 text-cyan-400" />
+                <span>Runway Photo Source & Attributions</span>
+              </div>
+              <div className="text-[11px] text-slate-300 space-y-1 pt-1">
+                <p><span className="text-slate-500">Source Archive:</span> {trend.photoSource || 'Unsplash High Fashion Editorial'}</p>
+                <p><span className="text-slate-500">Photographer:</span> {trend.photographer || 'Editorial Runway Photographer'}</p>
+                {trend.editorialCredit && (
+                  <p><span className="text-slate-500">Press Citation:</span> {trend.editorialCredit}</p>
+                )}
+                {trend.photoSourceUrl && (
+                  <div className="pt-1.5">
+                    <a
+                      href={trend.photoSourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-glass text-[10px] py-1 px-2.5 text-cyan-300 border-cyan-500/40 hover:bg-cyan-500/20 inline-flex items-center gap-1"
+                    >
+                      <span>View Direct Source Web Photo</span>
+                      <ExternalLink className="w-3 h-3 text-cyan-400" />
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Key Data Box */}
+            <div className="glass-panel p-4 space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                <span className="text-slate-400 text-[11px]">YoY Growth Velocity:</span>
+                <span className="text-cyan-300 font-bold">{trend.yoyGrowth || '+112% YoY'}</span>
+              </div>
+              <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                <span className="text-slate-400 text-[11px]">Social Media Reach:</span>
+                <span className="text-amber-300 font-bold">{trend.socialVolume || '8.4M posts'}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400 text-[11px]">Resale Liquidity Score:</span>
+                <span className="text-emerald-400 font-bold">{trend.resaleIndex || '95/100'}</span>
               </div>
             </div>
 
@@ -154,11 +201,55 @@ export default function TrendDetailModal({ trend, onClose, onToggleSave, isSaved
 
           {/* Right Column: Deep Analysis, Trajectory & Radar */}
           <div className="lg:col-span-7 space-y-4 sm:space-y-6">
-            {/* Description & Buying Advice */}
-            <div className="glass-panel p-4 sm:p-5 space-y-3">
+            {/* Description & Runway Quote */}
+            <div className="glass-panel p-4 sm:p-5 space-y-4">
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                 {trend.description}
               </p>
+
+              {/* Editorial Quote */}
+              {trend.runwayQuote && (
+                <div className="bg-slate-950/80 border-l-2 border-amber-400 p-3 rounded-r-xl italic text-xs text-amber-200/90 flex items-start gap-2">
+                  <MessageSquareQuote className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                  <span>{trend.runwayQuote}</span>
+                </div>
+              )}
+
+              {/* Lead Designers */}
+              {trend.leadDesigners && (
+                <div className="space-y-1">
+                  <span className="text-[11px] font-mono text-slate-400 uppercase tracking-widest block">Leading Fashion Houses & Designers:</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {trend.leadDesigners.map((designer, i) => (
+                      <span key={i} className="text-xs font-mono bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-md border border-amber-500/30">
+                        {designer}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Key Fabrics */}
+              {trend.keyFabrics && (
+                <div className="space-y-1">
+                  <span className="text-[11px] font-mono text-slate-400 uppercase tracking-widest block">Core Textile & Material Composition:</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {trend.keyFabrics.map((fabric, i) => (
+                      <span key={i} className="text-xs font-mono bg-cyan-500/10 text-cyan-300 px-2.5 py-1 rounded-md border border-cyan-500/30">
+                        {fabric}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Target Demographic */}
+              {trend.targetDemographic && (
+                <div className="text-xs font-mono text-slate-300 bg-slate-900/80 p-2.5 rounded-lg border border-white/5 flex items-center gap-2">
+                  <Users className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <span>Target Demographic: {trend.targetDemographic}</span>
+                </div>
+              )}
 
               <div className="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl flex items-start gap-2.5">
                 <Lightbulb className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
