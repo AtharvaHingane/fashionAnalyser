@@ -14,7 +14,7 @@ export default function TrendGraphs({ trends }) {
     : trends.filter(t => t.category.toLowerCase().includes(selectedCategory.toLowerCase()));
 
   // 1. Line Chart: Multi-Trend Trajectory
-  const lineColors = ['#d4af37', '#00f2fe', '#ff4d8d', '#00dfa2', '#ff9f43', '#7928ca'];
+  const lineColors = ['#d4af37', '#00f2fe', '#ff4d8d', '#00dfa2', '#ff9f43', '#7928ca', '#8b0000', '#4a3b32'];
   const lineChartData = {
     labels: MONTH_LABELS,
     datasets: filteredTrends.map((trend, idx) => ({
@@ -23,8 +23,8 @@ export default function TrendGraphs({ trends }) {
       borderColor: lineColors[idx % lineColors.length],
       backgroundColor: lineColors[idx % lineColors.length] + '20',
       tension: 0.35,
-      pointRadius: 4,
-      pointHoverRadius: 7
+      pointRadius: 3,
+      pointHoverRadius: 6
     }))
   };
 
@@ -34,29 +34,29 @@ export default function TrendGraphs({ trends }) {
     plugins: {
       legend: {
         position: 'top',
-        labels: { color: '#cbd5e1', font: { family: 'Outfit', size: 12 } }
+        labels: { color: '#cbd5e1', font: { family: 'Outfit', size: 10 }, boxWidth: 12 }
       },
       tooltip: {
         backgroundColor: '#0e1118',
         borderColor: 'rgba(212, 175, 55, 0.4)',
         borderWidth: 1,
-        titleFont: { family: 'Cinzel', size: 14 },
-        bodyFont: { family: 'Space Grotesk', size: 12 }
+        titleFont: { family: 'Cinzel', size: 12 },
+        bodyFont: { family: 'Space Grotesk', size: 10 }
       }
     },
     scales: {
-      x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk' } } },
-      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk' } }, min: 0, max: 100 }
+      x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk', size: 10 } } },
+      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk', size: 10 } }, min: 0, max: 100 }
     }
   };
 
   // 2. Bar Chart: Regional Adoption
   const cities = ['Paris', 'Tokyo', 'NYC', 'Milan', 'London'];
-  const barDatasets = filteredTrends.slice(0, 4).map((trend, idx) => ({
+  const barDatasets = filteredTrends.slice(0, 5).map((trend, idx) => ({
     label: trend.name.split('&')[0],
     data: cities.map(city => trend.regionalPopularity[city] || 70),
     backgroundColor: lineColors[idx % lineColors.length] + 'cc',
-    borderRadius: 6
+    borderRadius: 4
   }));
 
   const barChartData = {
@@ -68,21 +68,21 @@ export default function TrendGraphs({ trends }) {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { labels: { color: '#cbd5e1', font: { family: 'Outfit' } } }
+      legend: { labels: { color: '#cbd5e1', font: { family: 'Outfit', size: 10 }, boxWidth: 12 } }
     },
     scales: {
-      x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk' } } },
-      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk' } }, max: 100 }
+      x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk', size: 10 } } },
+      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Space Grotesk', size: 10 } }, max: 100 }
     }
   };
 
   // 3. Doughnut: Color Palette Dominance
   const colorDistributionData = {
-    labels: ['Warm Sand & Cashmere', 'Electric Cyan Tech', 'Blush Satin Pink', 'Forest Moss Green', 'Cobalt Storm Blue', 'Emerald Chrome'],
+    labels: ['Warm Sand', 'Electric Cyan', 'Crimson Plaid', 'Ivory Tweed', 'Blush Satin', 'Forest Moss'],
     datasets: [
       {
-        data: [28, 22, 18, 14, 10, 8],
-        backgroundColor: ['#D4A373', '#00F2FE', '#F3C6D3', '#556B2F', '#0A2540', '#0D5C3A'],
+        data: [26, 22, 18, 16, 10, 8],
+        backgroundColor: ['#D4A373', '#00F2FE', '#8B0000', '#F5F5DC', '#F3C6D3', '#556B2F'],
         borderColor: '#090b10',
         borderWidth: 2
       }
@@ -93,68 +93,69 @@ export default function TrendGraphs({ trends }) {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { position: 'right', labels: { color: '#cbd5e1', font: { family: 'Space Grotesk', size: 11 } } }
+      legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { family: 'Space Grotesk', size: 10 }, boxWidth: 10 } }
     }
   };
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-6 md:space-y-8 animate-fadeIn">
       {/* Top Filter Bar */}
-      <div className="glass-panel p-4 flex flex-wrap items-center justify-between gap-4">
+      <div className="glass-panel p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
-          <h2 className="font-editorial text-2xl font-bold gradient-text-gold">
+          <h2 className="font-editorial text-xl md:text-2xl font-bold gradient-text-gold">
             Predictive Fashion Analytics & Trajectory
           </h2>
-          <p className="text-xs text-slate-400">
-            Real-time comparative cross-regional velocity models & color frequency metrics.
+          <p className="text-[11px] md:text-xs text-slate-400">
+            Real-time comparative cross-regional velocity models across Gen-Z, 90s Revival & Old Money trends.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          {['all', 'Haute Couture', 'Streetwear', 'Aesthetic', 'Sustainable'].map((cat) => (
+        {/* Scrollable category filter pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none max-w-full">
+          {['all', 'Gen-Z', '90s Revival', 'Old Money', 'Streetwear'].map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all whitespace-nowrap flex-shrink-0 ${
                 selectedCategory === cat 
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50' 
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 font-bold' 
                   : 'bg-slate-900/50 text-slate-400 border border-white/5 hover:border-white/20'
               }`}
             >
-              {cat.toUpperCase()}
+              {cat === 'Gen-Z' ? '🔥 GEN-Z' : cat === '90s Revival' ? '📼 90S REVIVAL' : cat === 'Old Money' ? '👑 OLD MONEY' : cat.toUpperCase()}
             </button>
           ))}
         </div>
       </div>
 
       {/* Main Graphs Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6">
         {/* Line Chart: Trajectory over time */}
-        <div className="lg:col-span-8 glass-panel p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-editorial text-lg font-bold text-white flex items-center gap-2">
-              <Activity className="w-5 h-5 text-amber-400" />
+        <div className="lg:col-span-8 glass-panel p-4 md:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <h3 className="font-editorial text-base md:text-lg font-bold text-white flex items-center gap-2">
+              <Activity className="w-4 h-4 text-amber-400" />
               6-Month Trend Growth Trajectory Index
             </h3>
-            <span className="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md border border-cyan-500/30">
+            <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/30 self-start sm:self-auto">
               Velocity Algorithm v4
             </span>
           </div>
-          <div className="h-80">
+          <div className="h-64 sm:h-80">
             <Line data={lineChartData} options={lineOptions} />
           </div>
         </div>
 
         {/* Doughnut: Dominant Runway Palette */}
-        <div className="lg:col-span-4 glass-panel p-6 flex flex-col justify-between">
+        <div className="lg:col-span-4 glass-panel p-4 md:p-6 flex flex-col justify-between">
           <div>
-            <h3 className="font-editorial text-lg font-bold text-white flex items-center gap-2 mb-2">
-              <Palette className="w-5 h-5 text-rose-400" />
+            <h3 className="font-editorial text-base md:text-lg font-bold text-white flex items-center gap-2 mb-1">
+              <Palette className="w-4 h-4 text-rose-400" />
               Runway Color Palette Share
             </h3>
-            <p className="text-xs text-slate-400 mb-4">Global hex code breakdown across fashion capitals.</p>
+            <p className="text-[11px] text-slate-400 mb-3">Global hex breakdown across fashion hubs.</p>
           </div>
-          <div className="h-64">
+          <div className="h-56 sm:h-64">
             <Doughnut data={colorDistributionData} options={doughnutOptions} />
           </div>
         </div>
@@ -164,14 +165,14 @@ export default function TrendGraphs({ trends }) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Bar Chart: Regional Hub Popularity */}
         <div className="lg:col-span-12 glass-panel p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-editorial text-lg font-bold text-white flex items-center gap-2">
-              <Map className="w-5 h-5 text-emerald-400" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
+            <h3 className="font-editorial text-base md:text-lg font-bold text-white flex items-center gap-2">
+              <Map className="w-4 h-4 text-emerald-400" />
               Regional Adoption Index across Fashion Hubs
             </h3>
-            <span className="text-xs font-mono text-slate-400">Comparing Paris, Tokyo, NYC, Milan & London</span>
+            <span className="text-[11px] font-mono text-slate-400">Comparing Paris, Tokyo, NYC, Milan & London</span>
           </div>
-          <div className="h-72">
+          <div className="h-60 sm:h-72">
             <Bar data={barChartData} options={barOptions} />
           </div>
         </div>
